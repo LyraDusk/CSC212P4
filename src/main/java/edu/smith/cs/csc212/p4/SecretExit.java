@@ -13,4 +13,6 @@ public class SecretExit extends Exit{
 	public void search() {
 		this.isSecret = false;
 	}
+	
+	
 }

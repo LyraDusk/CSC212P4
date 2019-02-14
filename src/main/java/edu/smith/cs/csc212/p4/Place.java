@@ -54,10 +54,18 @@ public class Place {
 	 */
 	public void addExit(Exit exit) {
 		this.exits.add(exit);
-		if (!exit.getSecret()) {
-			this.visibleExits.add(exit);
-		}
+		this.visibleExits.add(exit);
+		
 	}
+	
+	/*
+	 * Create a secret exit
+	 */
+	
+	public void addSecretExit(Exit exit) {
+		this.exits.add(exit);
+	}
+	
 	
 	/**
 	 * For gameplay, whether this place ends the game.
@@ -127,8 +135,11 @@ public class Place {
 	 */
 	public void search() {
 		for(Exit e: exits) {
+			if(!visibleExits.contains(e)) {
 			e.search();
-			Collections.unmodifiableList(visibleExits).add(e);
+			visibleExits.add(e);
+			}
+			
 		}
 	}
 	

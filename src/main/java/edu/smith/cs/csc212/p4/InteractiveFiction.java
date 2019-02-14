@@ -70,7 +70,7 @@ public class InteractiveFiction {
 			 */
 			
 			if (action.equals("search")) {
-				exits = here.getAllExits();
+				here.search();
 				continue;
 				}
 			
