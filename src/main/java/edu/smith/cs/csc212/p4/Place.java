@@ -14,6 +14,13 @@ public class Place {
 	 * This is a list of places we can get to from this place.
 	 */
 	private List<Exit> exits;
+	
+	/*
+	 * This is a list of visible exits
+	 */
+	
+	private List<Exit> visibleExits;
+	
 	/**
 	 * This is the identifier of the place.
 	 */
@@ -37,6 +44,7 @@ public class Place {
 		this.id = id;
 		this.description = description;
 		this.exits = new ArrayList<>();
+		this.visibleExits = new ArrayList<>();
 		this.terminal = terminal;
 	}
 	
@@ -46,6 +54,9 @@ public class Place {
 	 */
 	public void addExit(Exit exit) {
 		this.exits.add(exit);
+		if (!exit.getSecret()) {
+			this.visibleExits.add(exit);
+		}
 	}
 	
 	/**
@@ -77,6 +88,10 @@ public class Place {
 	 * @return all the exits from this place.
 	 */
 	public List<Exit> getVisibleExits() {
+		return Collections.unmodifiableList(visibleExits);
+	}
+	
+	public List<Exit> getAllExits() {
 		return Collections.unmodifiableList(exits);
 	}
 	
@@ -105,6 +120,16 @@ public class Place {
 	 */
 	public int hashCode() {
 		return this.id.hashCode();
+	}
+	
+	/*
+	 * Reveals all hidden exits
+	 */
+	public void search() {
+		for(Exit e: exits) {
+			e.search();
+			Collections.unmodifiableList(visibleExits).add(e);
+		}
 	}
 	
 	/**

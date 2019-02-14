@@ -65,6 +65,16 @@ public class InteractiveFiction {
 				}
 			}
 			
+			/*
+			 * Check the words against the possible actions we're going to implement here
+			 */
+			
+			if (action.equals("search")) {
+				exits = here.getAllExits();
+				continue;
+				}
+			
+			
 			// From here on out, what they typed better be a number!
 			Integer exitNum = null;
 			try {
