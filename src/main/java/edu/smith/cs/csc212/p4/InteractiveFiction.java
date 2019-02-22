@@ -20,6 +20,10 @@ public class InteractiveFiction {
 		// This is the game we're playing.
 		GameWorld game = new SpookyMansion();
 		
+		//This is the time keeper
+		GameTime timer = new GameTime();
+		
+		
 		// This is the current location of the player (initialize as start).
 		// Maybe we'll expand this to a Player object.
 		String place = game.getStart();
@@ -29,7 +33,8 @@ public class InteractiveFiction {
 		while (true) {
 			// Print the description of where you are.
 			Place here = game.getPlace(place);
-			System.out.println(here.getDescription());
+			System.out.println(here.getDescription(timer.getDay()));
+			System.out.println(timer.printHour());
 
 			// Game over after print!
 			if (here.isTerminalState()) {
@@ -41,7 +46,9 @@ public class InteractiveFiction {
 			
 			for (int i=0; i<exits.size(); i++) {
 			    Exit e = exits.get(i);
+			    if(e.getOpen(timer.hour)) {
 				System.out.println(" ["+i+"] " + e.getDescription());
+			    }
 			}
 
 			// Figure out what the user wants to do, for now, only "quit" is special.
@@ -66,13 +73,20 @@ public class InteractiveFiction {
 			}
 			
 			/*
-			 * Check the words against the possible actions we're going to implement here
+			 * Check the words against the possible actions Search and Rest
 			 */
 			
+			// Reveals hidden doors
 			if (action.equals("search")) {
 				here.search();
 				continue;
 				}
+			
+			// Skips time forward one hour (Decreased from two to make time-sensitive exits easier)
+			if (action.contentEquals("rest")) {
+				timer.increaseHour();
+				continue;
+			}
 			
 			
 			// From here on out, what they typed better be a number!
@@ -92,10 +106,12 @@ public class InteractiveFiction {
 			// Move to the room they indicated.
 			Exit destination = exits.get(exitNum);
 			place = destination.getTarget();
+			timer.increaseHour();
 		}
 
 		// You get here by "quit" or by reaching a Terminal Place.
 		System.out.println(">>> GAME OVER <<<");
+		System.out.println("You spent "+ timer.totalTime + " hours in the mansion!");
 	}
 
 }

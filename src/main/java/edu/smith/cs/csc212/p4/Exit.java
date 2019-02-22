@@ -17,8 +17,17 @@ public class Exit {
 	 */
 	private String target;
 	
+	/*
+	 * Whether or not the door is immediately visible
+	 */
+	public boolean isSecret;
 	
-	private boolean isSecret;
+	
+	/*
+	 * Sets the hour that the door is open, in 24hr time. 25 is set as default
+	 * for a door open regardless of time.
+	 */
+	private int openTime;
 	/**
 	 * Create a new Exit.
 	 * @param target - where it goes.
@@ -28,6 +37,15 @@ public class Exit {
 		this.description = description;
 		this.target = target;
 		this.isSecret = false;
+		this.openTime = 25;
+	}
+	
+	/*
+	 * Sets the exit to a specific hour
+	 */
+	public Exit setTime(int hour) {
+		this.openTime = hour;
+		return this;
 	}
 	
 	/**
@@ -53,7 +71,17 @@ public class Exit {
 	public Boolean getSecret() {
 		return this.isSecret;
 	}
-	
+	/*
+	 * Checks if an exit is available at the current time. 
+	 * Exits with the value 25 are open at all times.
+	 */
+	public Boolean getOpen(int hour) {
+		if(this.openTime == hour || this.openTime == 25) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/*
 	 *  Reveals hidden exits (Does nothing in main exit class)
 	 */

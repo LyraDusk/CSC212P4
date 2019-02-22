@@ -28,11 +28,20 @@ public class Place {
 	/**
 	 * What to tell the user about this place.
 	 */
-	private String description;
+	public String description;
+	
+	/*
+	 * Alternate description for places that change 
+	 */
+	public String altdesc;
+	
+	
 	/**
 	 * Whether reaching this place ends the game.
 	 */
 	private boolean terminal;
+	
+	
 	
 	/**
 	 * Internal only constructor for Place. Use {@link #create(String, String)} or {@link #terminal(String, String)} instead.
@@ -40,13 +49,23 @@ public class Place {
 	 * @param description - the user-facing description of the place.
 	 * @param terminal - whether this place ends the game.
 	 */
-	private Place(String id, String description, boolean terminal) {
+	public Place(String id, String description, boolean terminal) {
 		this.id = id;
 		this.description = description;
 		this.exits = new ArrayList<>();
 		this.visibleExits = new ArrayList<>();
 		this.terminal = terminal;
+		
 	}
+	
+	/*
+	 * Adds an alternate (nighttime) description to a place
+	 */
+	public void addAltDesc(String altdesc) {
+		this.altdesc = altdesc;
+	}
+	
+	
 	
 	/**
 	 * Create an exit for the user to navigate to another Place.
@@ -87,18 +106,25 @@ public class Place {
 	 * The narrative description of this place.
 	 * @return what we show to a player about this place.
 	 */
-	public String getDescription() {
-		return this.description;
+	public String getDescription(boolean day) {
+		if(!day && this.altdesc != null) {
+			return this.altdesc;
+		} else {
+			return this.description;
+		}
 	}
 
 	/**
-	 * Get a view of the exits from this Place, for navigation.
+	 * Get a view of the visible exits from this Place, for navigation.
 	 * @return all the exits from this place.
 	 */
 	public List<Exit> getVisibleExits() {
 		return Collections.unmodifiableList(visibleExits);
 	}
 	
+	/*
+	 * Returns all exits, not just the visible ones
+	 */
 	public List<Exit> getAllExits() {
 		return Collections.unmodifiableList(exits);
 	}

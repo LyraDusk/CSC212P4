@@ -29,6 +29,9 @@ public class SpookyMansion implements GameWorld {
 		entranceHall.addExit(new Exit("basement", "There are stairs leading down."));
 		entranceHall.addExit(new Exit("attic", "There are stairs leading up."));
 		entranceHall.addExit(new Exit("kitchen", "There is a red door."));
+		Exit frontdoortemp = new Exit("frontdoor","The front door seems to have opened on its own.");
+		frontdoortemp.setTime(9);
+		entranceHall.addExit(frontdoortemp);
 		
 		Place basement = insert(
 				Place.create("basement", "You have found the basement of the mansion.\n" + 
@@ -42,6 +45,11 @@ public class SpookyMansion implements GameWorld {
 		Place cellar = insert(Place.create("cellar", "The cellar is full of crates. You feel like you're being watched, \n"
 				+ "but it's probably just the rats."));
 		cellar.addExit(new Exit("basement","The old door leads back to the basement."));
+		//Setting a timed exit requires a bit more variable juggling, but it works
+		Exit laddertemp = new Exit("ladder","A trapdoor appears in the ceiling.");
+		laddertemp.setTime(0);
+		cellar.addExit(laddertemp);
+		
 		
 		Place attic = insert(Place.create("attic",
 				"Something rustles in the rafters as you enter the attic. Creepy.\n" + "It's big up here."));
@@ -52,9 +60,14 @@ public class SpookyMansion implements GameWorld {
 		Place attic2 = insert(Place.create("attic2", "There's definitely a bat in here somewhere.\n"
 				+ "This part of the attic is brighter, so maybe you're safe here."));
 		attic2.addExit(new Exit("attic", "There is more back through the archway"));
+		Exit attictemp = new Exit("porch","There is a door in the wall where a moment ago there was nothing.");
+		attictemp.setTime(17);
+		attic2.addExit(attictemp);
 		
-		Place atticwindow = insert(Place.create("window", "The window looks out over the yard. It is dark outside."));
+		Place atticwindow = insert(Place.create("window",
+				"The window looks out over the yard. The sun peeks over the trees."));
 		atticwindow.addExit(new Exit("attic","Go back."));
+		atticwindow.addAltDesc("The window looks out over the yard. It is dark outside.");
 		
 		Place kitchen = insert(Place.create("kitchen", "You've found the kitchen. You smell old food and some kind of animal."));
 		kitchen.addExit(new Exit("entranceHall", "There is a red door."));
@@ -86,9 +99,22 @@ public class SpookyMansion implements GameWorld {
 		}
 		
 		Place crypt = insert(Place.terminal("crypt", "You have found the crypt.\n"
-				+"It is scary here, but there is an exit to outside.\n"+
+				+"It is scary here, but light is streaming down from the way out.\n"+
 				"Maybe you'll be safe out there."));
+		crypt.addAltDesc("You have found the crypt.\n"
+				+"It is scary here, a door leads out into the night.\n"+
+				"Maybe you'll be safe out there.");
 		
+		Place ladder = insert(Place.terminal("ladder", "A ladder leads up through the trapdoor. \nYou see stars above.\n" + 
+		"Maybe a way out?"));
+		
+		
+		Place frontDoor = insert(Place.terminal("frontdoor", "The front door swings open, as if releasing you.\n + "
+				+ "A ray of sunlight bathes the front yard as you walk away."));
+				
+		Place porch = insert(Place.terminal("porch", "The door leads to a porch outside.\n"+
+		"As you look behind you, the door vanishes into the wall as the house releases you."));
+				
 		// Make sure your graph makes sense!
 		checkAllExitsGoSomewhere();
 	}
@@ -104,6 +130,7 @@ public class SpookyMansion implements GameWorld {
 		places.put(p.getId(), p);
 		return p;
 	}
+
 
 	/**
 	 * I like this method for checking to make sure that my graph makes sense!
